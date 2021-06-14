@@ -3,16 +3,17 @@
 #include<stdlib.h>
 #include<windows.h>
 
-//struct section
+//Struct section untuk linked list
+//Struct data sampah
 struct Trash{
     char trash_name[25];
     int value;
     struct Trash *next_trash;
 };
-
 typedef struct Trash trash;
 typedef trash *ptr_trash;
 
+//Struct data akun  
 struct User{
     char name[32];
     char username[32];
@@ -20,14 +21,15 @@ struct User{
     ptr_trash linked_account;
     struct User *next_user;
 };
-
 typedef struct User user;
 typedef user *ptr_user;
 
-//function prototype section
+//Function prototype section
 void count_create_user(FILE *file, int *counter);
+int menu_user();
+int menu_admin();
 
-//main function section
+//Main function section
 int main(){
     int counter_user = 0, counter_trash = 0;
     //set for the linked list User
@@ -40,7 +42,7 @@ int main(){
 
 }
 
-//function section
+//Function section
 void count_create_user(FILE *file, int *counter){
     char ch;
     file = fopen("User.txt","r");
@@ -58,4 +60,34 @@ void count_create_user(FILE *file, int *counter){
         }
         fclose(file);
     }
+}
+
+int menu_user(){
+    int pilihan;
+    system("CLS");
+    printf("===========================================\n");
+    printf("Selamat datang <username>\n");
+    printf("===========================================\n");
+    //Tinggal di sesuaikan menu dengan pilihan nanti
+    printf("\n1. Menu 1");
+    printf("\n2. Menu 2");
+    printf("\n3. Menu 3");
+    printf("\n\nPilihan: ");
+    scanf("%d", &pilihan);
+    return pilihan;
+}
+
+int menu_admin(){
+    int pilihan;
+    system("CLS");
+    printf("===========================================\n");
+    printf("Selamat datang di menu admin\n");
+    printf("===========================================\n");
+    //Tinggal di sesuaikan menu dengan pilihan nanti
+    printf("\n1. Menu 1");
+    printf("\n2. Menu 2");
+    printf("\n3. Menu 3");
+    printf("\n\nPilihan: ");
+    scanf("%d", &pilihan);
+    return pilihan;
 }
