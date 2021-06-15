@@ -29,7 +29,7 @@ void count_create_user(FILE *file, int *counter);
 int menu_user();
 int menu_admin();
 void login(char user_temp[32], char pass_temp[32]);
-struct user *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
+struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
 
 
@@ -46,8 +46,9 @@ int main(){
 
     while (1)
     {
+        //printf("\n%d\n",counter_user);
         login(user_temp, pass_temp);
-        if(user_temp == 'admin' && pass_temp == 'admin'){
+        if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             switch(menu_admin()){
                 case 1:
                     //command
@@ -59,9 +60,9 @@ int main(){
             temp = user_checker(user_temp, pass_temp ,head);
             if(temp == NULL){
                 select = 0;
-                printf("\nRegister your account Y/N ?\n");
-                scnaf("%d", &select);
-                if(select == 'y' || select == 'Y'){
+                printf("\nRegister your account Y(1)/N(0) ?\n");
+                scanf("%d", &select);
+                if(select == 1){
                     registration(&head,user_temp,pass_temp,&counter_user);
                 }else{
                     continue;
@@ -87,7 +88,7 @@ int main(){
 void count_create_user(FILE *file, int *counter){
     char ch;
     file = fopen("User.txt","r");
-    if(file==NULL){
+    if(file == NULL){
         printf("making file\n");
         fclose(file);
         fopen("User.txt","w");
@@ -143,15 +144,16 @@ void login(char user_temp[32], char pass_temp[32]){
     scanf(" %[^\n]",pass_temp);
 }
 
-struct user *user_checker(char user_temp[32], char pass_temp[32], ptr_user database){
+struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database){
     ptr_user current = database;
     if(current == NULL){
         printf("\nThere is no account yet\n");
         return NULL;
     }else{
         while(current != NULL){
-            if(strcmp(current->username,user_temp == 0 && strcmp(current->password,pass_temp) == 0)){
+            if(strcmp(current->username,user_temp) == 0 && strcmp(current->password,pass_temp) == 0){
                 return current;
+                break;
             }
             current = current->next_user;
         }
@@ -167,24 +169,26 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
         printf("===========================\n");
         printf("=      Halaman Login      =\n");
         printf("===========================\n\n");
-        printf("Username : ", user_temp);
+        printf("Username : %s\n", user_temp);
         strcpy(new->username,user_temp);
-        printf("Password : ", pass_temp);
+        printf("Password : %s\n", pass_temp);
         strcpy(new->password,pass_temp);
         printf("Name : ");
         scanf(" %[^\n]", new->name);
         new->next_user = NULL;
         new->linked_account = NULL;
-        *counter++;
+        
 
         if(*head == NULL){
             *head = new;
+            *counter++;
         }else{
             current = *head;
-            while(current != NULL){
+            while(current->next_user != NULL){
                 current = current->next_user;            
             }
-            current = new;
+            current->next_user = new;
+            *counter++;
         }
     }else{
         printf("\nmemory not allocated");
