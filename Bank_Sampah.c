@@ -28,16 +28,57 @@ typedef user *ptr_user;
 void count_create_user(FILE *file, int *counter);
 int menu_user();
 int menu_admin();
+void login(char user_temp[32], char pass_temp[32]);
+struct user *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
+void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
+
 
 //Main function section
 int main(){
-    int counter_user = 0, counter_trash = 0;
+    int counter_user = 0, counter_trash = 0, select = 0;
+    char user_temp[32], pass_temp[32];
     //set for the linked list User
     ptr_user head = NULL;
     ptr_user temp = NULL;
     //set for the file
     FILE *file;
     count_create_user(file, &counter_user);
+
+    while (1)
+    {
+        login(user_temp, pass_temp);
+        if(user_temp == 'admin' && pass_temp == 'admin'){
+            switch(menu_admin()){
+                case 1:
+                    //command
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            temp = user_checker(user_temp, pass_temp ,head);
+            if(temp == NULL){
+                select = 0;
+                printf("\nRegister your account Y/N ?\n");
+                scnaf("%d", &select);
+                if(select == 'y' || select == 'Y'){
+                    registration(&head,user_temp,pass_temp,&counter_user);
+                }else{
+                    continue;
+                }
+            }else{
+                switch (menu_user()){
+                case 1:
+                    //command
+                    break;
+                
+                default:
+                    break;
+                }
+            }
+        }
+    }
+    
 
 
 }
@@ -66,7 +107,7 @@ int menu_user(){
     int pilihan;
     system("CLS");
     printf("===========================================\n");
-    printf("Selamat datang <username>\n");
+    printf("Selamat datang <nama>\n");
     printf("===========================================\n");
     //Tinggal di sesuaikan menu dengan pilihan nanti
     printf("\n1. Menu 1");
@@ -90,4 +131,62 @@ int menu_admin(){
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
+}
+
+void login(char user_temp[32], char pass_temp[32]){
+    printf("===========================\n");
+    printf("=      Halaman Login      =\n");
+    printf("===========================\n");
+    printf("\nUsername : ");
+    scanf(" %[^\n]",user_temp);
+    printf("\npassword : ");
+    scanf(" %[^\n]",pass_temp);
+}
+
+struct user *user_checker(char user_temp[32], char pass_temp[32], ptr_user database){
+    ptr_user current = database;
+    if(current == NULL){
+        printf("\nThere is no account yet\n");
+        return NULL;
+    }else{
+        while(current != NULL){
+            if(strcmp(current->username,user_temp == 0 && strcmp(current->password,pass_temp) == 0)){
+                return current;
+            }
+            current = current->next_user;
+        }
+    }
+}
+
+void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter){
+    ptr_user new;
+    ptr_user current;
+
+    new = malloc(sizeof(user));
+    if(new != NULL){
+        printf("===========================\n");
+        printf("=      Halaman Login      =\n");
+        printf("===========================\n\n");
+        printf("Username : ", user_temp);
+        strcpy(new->username,user_temp);
+        printf("Password : ", pass_temp);
+        strcpy(new->password,pass_temp);
+        printf("Name : ");
+        scanf(" %[^\n]", new->name);
+        new->next_user = NULL;
+        new->linked_account = NULL;
+        *counter++;
+
+        if(*head == NULL){
+            *head = new;
+        }else{
+            current = *head;
+            while(current != NULL){
+                current = current->next_user;            
+            }
+            current = new;
+        }
+    }else{
+        printf("\nmemory not allocated");
+    }
 }
