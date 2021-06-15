@@ -46,7 +46,6 @@ int main(){
 
     while (1)
     {
-        //printf("\n%d\n",counter_user);
         login(user_temp, pass_temp);
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             switch(menu_admin()){
