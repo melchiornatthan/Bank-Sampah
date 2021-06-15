@@ -58,7 +58,6 @@ int main(){
         }else{
             temp = user_checker(user_temp, pass_temp ,head);
             if(temp == NULL){
-                select = 0;
                 printf("\nRegister your account Y(1)/N(0) ?\n");
                 scanf("%d", &select);
                 if(select == 1){
