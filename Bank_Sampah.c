@@ -33,6 +33,7 @@ void login(char user_temp[32], char pass_temp[32]);
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
 void tambahSampah(FILE *dataSampah, int *counter_sampah);
+void list_sampah(FILE *dataSampah, int counter_sampah);
 
 
 //Main function section
@@ -52,6 +53,7 @@ int main(){
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             switch(menu_admin()){
                 case 1:
+                    list_sampah(file,counter_trash);
                     break;
                 case 2:
                     tambahSampah(file,&counter_trash);
@@ -72,7 +74,7 @@ int main(){
             }else{
                 switch (menu_user(temp)){
                 case 1:
-                    //function
+                    list_sampah(file,counter_trash);
                     break;
                 
                 default:
@@ -203,20 +205,34 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
     char namaSampah[32];
     int hargaSampah;
     int sentinel = 0;
-    dataSampah = fopen("List Sampah", "w");
+    dataSampah = fopen("List Sampah.txt", "a");
     while(sentinel != 1){
-        printf("===========================\n");
-        printf("=      Halaman Login      =\n");
-        printf("===========================\n\n");
+        printf("============================\n");
+        printf("=    Input Jenis Sampah    =\n");
+        printf("============================\n\n");
         printf("\nSilahkan Masukkan Nama Sampah : ");
         scanf(" %[^\n]", namaSampah);
         printf("Silahkan Masukkan Harga Sampah : ");
         scanf("%d", &hargaSampah);
         fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);
-        *counter_sampah++;
+        (*counter_sampah)++;
         printf("\nLanjut(0) Keluar(1)");
         scanf("%d", &sentinel);
-	}
+    }
     fclose(dataSampah);
 
+}
+
+void list_sampah(FILE *dataSampah, int counter_sampah){
+    int i, temp_harga_sampah;
+    char temp_nama_sampah[32];
+    dataSampah = fopen("List Sampah.txt", "r");
+    printf("=============================\n");
+    printf("=     List Jenis Sampah     =\n");
+    printf("=============================\n\n");
+    do{
+        fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
+        printf("%s\t%d\n", temp_nama_sampah, temp_harga_sampah);
+    }while(!feof(dataSampah));
+    fclose(dataSampah);
 }

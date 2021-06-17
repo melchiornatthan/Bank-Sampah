@@ -1,0 +1,3 @@
+buku	2000
+telu	3000
+keong	2000
