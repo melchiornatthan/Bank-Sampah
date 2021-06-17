@@ -38,7 +38,7 @@ void list_sampah(FILE *dataSampah, int counter_sampah);
 
 //Main function section
 int main(){
-    int counter_user = 0, counter_trash = 0, select = 0;
+    int counter_user = 0, counter_trash = 0, select = 0, sentinelMenu = 0;
     char user_temp[32], pass_temp[32];
     //set for the linked list User
     ptr_user head = NULL;
@@ -51,16 +51,26 @@ int main(){
     {
         login(user_temp, pass_temp);
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
-            switch(menu_admin()){
-                case 1:
-                    list_sampah(file,counter_trash);
-                    break;
-                case 2:
-                    tambahSampah(file,&counter_trash);
-                    continue;
-                default:
-                    break;
-            }
+            do{
+                switch(menu_admin()){
+                    case 0:
+                        sentinelMenu = 99;
+                        break;
+                    case 1:
+                        list_sampah(file,counter_trash);
+                        system("pause");
+                        continue;
+                    case 2:
+                        tambahSampah(file,&counter_trash);
+                        system("pause");
+                        continue;
+                    default:
+                        printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
+                        system("pause");
+                        continue;
+                }
+            }while(sentinelMenu != 99);
+            
         }else{
             temp = user_checker(user_temp, pass_temp ,head);
             if(temp == NULL){
@@ -72,20 +82,24 @@ int main(){
                     continue;
                 }
             }else{
-                switch (menu_user(temp)){
-                case 1:
-                    list_sampah(file,counter_trash);
-                    break;
-                
-                default:
-                    break;
-                }
+                do{
+                    switch (menu_user(temp)){
+                        case 0:
+                            sentinelMenu = 99;
+                            break;
+                        case 1:
+                            list_sampah(file,counter_trash);
+                            system("pause");
+                            continue;
+                        default:
+                            printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
+                            system("pause");
+                            continue;
+                    }
+                }while(sentinelMenu != 99);
             }
         }
     }
-    
-
-
 }
 
 //Function section
@@ -118,6 +132,7 @@ int menu_user(ptr_user nama){
     printf("\n1. List Jenis Sampah");
     printf("\n2. Penyetoran Sampah");
     printf("\n3. Saldo Akun");
+    printf("\n\n0. Keluar");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -135,6 +150,7 @@ int menu_admin(){
     printf("\n3. Ubah Nilai Sampah");
     printf("\n4. List Akun");
     printf("\n5. Hapus Akun");
+    printf("\n\n0. Keluar");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -203,24 +219,35 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
 
 void tambahSampah(FILE *dataSampah,int *counter_sampah){
     char namaSampah[32];
-    int hargaSampah;
+    char temp_nama_sampah[32];
+    int hargaSampah, flag, temp_harga_sampah;
     int sentinel = 0;
-    dataSampah = fopen("List Sampah.txt", "a");
-    while(sentinel != 1){
-        printf("============================\n");
-        printf("=    Input Jenis Sampah    =\n");
-        printf("============================\n\n");
+    dataSampah = fopen("List Sampah.txt", "a+");
+    printf("============================\n");
+    printf("=    Input Jenis Sampah    =\n");
+    printf("============================\n");
+    do{
+        flag = 0;
         printf("\nSilahkan Masukkan Nama Sampah : ");
         scanf(" %[^\n]", namaSampah);
-        printf("Silahkan Masukkan Harga Sampah : ");
-        scanf("%d", &hargaSampah);
-        fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);
-        (*counter_sampah)++;
-        printf("\nLanjut(0) Keluar(1)");
-        scanf("%d", &sentinel);
-    }
+        do{
+            fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
+            if(strcmpi(temp_nama_sampah, namaSampah) == 0){
+                flag = 1;
+            }        
+        }while(!feof(dataSampah));
+        if(flag == 1){
+            printf("\nJenis sampah sudah ada, silahkan coba lagi\n\n");
+            //system("pause");
+        }
+        //system("CLS");
+    }while(flag == 1);
+        
+    printf("Silahkan Masukkan Harga Sampah : ");
+    scanf("%d", &hargaSampah);
+    fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);
+    (*counter_sampah)++;
     fclose(dataSampah);
-
 }
 
 void list_sampah(FILE *dataSampah, int counter_sampah){
