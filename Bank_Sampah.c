@@ -206,20 +206,23 @@ void tambahSampah(FILE *dataSampah){
     int counter = 0;
     dataSampah = fopen("List Sampah", "w");
     while(sentinel != 1){
-    printf("\nSilahkan Masukkan Nama Sampah : ");
-    scanf(" %[^\n]", namaSampah);
-    printf("Silahkan Masukkan Harga Sampah : ");
-    scanf("%d", &hargaSampah);
-	
-	if(counter == 0){
-		fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
-	}
-	fprintf(dataSampah, "\n%s\t%d", namaSampah,hargaSampah);
-    
-	counter++;
-    
-	printf("\nLanjut(0) Keluar(1)");
-    scanf("%d", &sentinel);
+        printf("===========================\n");
+        printf("=      Halaman Login      =\n");
+        printf("===========================\n\n");
+        printf("\nSilahkan Masukkan Nama Sampah : ");
+        scanf(" %[^\n]", namaSampah);
+        printf("Silahkan Masukkan Harga Sampah : ");
+        scanf("%d", &hargaSampah);
+        
+        if(counter == 0){
+            fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
+        }
+        fprintf(dataSampah, "\n%s\t%d", namaSampah,hargaSampah);
+        
+        counter++;
+        
+        printf("\nLanjut(0) Keluar(1)");
+        scanf("%d", &sentinel);
 	
 	}
     fclose(dataSampah);
