@@ -26,7 +26,7 @@ typedef struct User user;
 typedef user *ptr_user;
 
 //Function prototype section
-void count_create_user(FILE *file, int *counter);
+void count_create(FILE *file, int *counter, char file_name[30]);
 int menu_user(ptr_user nama);
 int menu_admin();
 void login(char user_temp[32], char pass_temp[32]);
@@ -45,7 +45,9 @@ int main(){
     ptr_user temp = NULL;
     //set for the file
     FILE *file;
-    count_create_user(file, &counter_user);
+    count_create(file, &counter_user, "User.txt");
+    count_create(file, &counter_trash, "List Sampah.txt");
+
 
     while (1)
     {
@@ -103,13 +105,13 @@ int main(){
 }
 
 //Function section
-void count_create_user(FILE *file, int *counter){
+void count_create(FILE *file, int *counter, char file_name[30]){
     char ch;
-    file = fopen("User.txt","r");
+    file = fopen(file_name,"r");
     if(file == NULL){
         printf("making file\n");
         fclose(file);
-        fopen("User.txt","w");
+        fopen(file_name,"w");
         fclose(file);
     }else{
         while(!feof(file)){
@@ -203,14 +205,14 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
 
         if(*head == NULL){
             *head = new;
-            *counter++;
+            (*counter)++;
         }else{
             current = *head;
             while(current->next_user != NULL){
                 current = current->next_user;            
             }
             current->next_user = new;
-            *counter++;
+            (*counter)++;
         }
     }else{
         printf("\nmemory not allocated");
@@ -257,9 +259,9 @@ void list_sampah(FILE *dataSampah, int counter_sampah){
     printf("=============================\n");
     printf("=     List Jenis Sampah     =\n");
     printf("=============================\n\n");
-    do{
+    for(i = 0; i < counter_sampah; i++){
         fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
         printf("%s\t%d\n", temp_nama_sampah, temp_harga_sampah);
-    }while(!feof(dataSampah));
+    }
     fclose(dataSampah);
 }
