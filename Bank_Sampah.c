@@ -32,7 +32,7 @@ int menu_admin();
 void login(char user_temp[32], char pass_temp[32]);
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
-void tambahJenis(FILE *dataSampah);
+void tambahSampah(FILE *dataSampah);
 
 
 //Main function section
@@ -54,8 +54,8 @@ int main(){
                 case 1:
                     break;
                 case 2:
-                    tambahJenis(file);
-                    break;
+                    tambahSampah(file);
+                    continue;
                 default:
                     break;
             }
@@ -203,16 +203,25 @@ void tambahSampah(FILE *dataSampah){
     char namaSampah[32];
     int hargaSampah;
     int sentinel = 0;
+    int counter = 0;
     dataSampah = fopen("List Sampah", "w");
     while(sentinel != 1){
-    printf("Silahkan Masukkan Nama Sampah : ");
+    printf("\nSilahkan Masukkan Nama Sampah : ");
     scanf(" %[^\n]", namaSampah);
     printf("Silahkan Masukkan Harga Sampah : ");
     scanf("%d", &hargaSampah);
-
-    fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
-    printf("\nLanjut(0) Keluar(1)");
-    scanf("%d", sentinel);
-    }
+	
+	if(counter == 0){
+		fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
+	}
+	fprintf(dataSampah, "\n%s\t%d", namaSampah,hargaSampah);
+    
+	counter++;
+    
+	printf("\nLanjut(0) Keluar(1)");
+    scanf("%d", &sentinel);
+	
+	}
+    fclose(dataSampah);
 
 }
