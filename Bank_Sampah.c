@@ -32,7 +32,7 @@ int menu_admin();
 void login(char user_temp[32], char pass_temp[32]);
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
-void tambahSampah(FILE *dataSampah);
+void tambahSampah(FILE *dataSampah, int *counter_sampah);
 
 
 //Main function section
@@ -54,7 +54,7 @@ int main(){
                 case 1:
                     break;
                 case 2:
-                    tambahSampah(file);
+                    tambahSampah(file,&counter_trash);
                     continue;
                 default:
                     break;
@@ -108,9 +108,9 @@ void count_create_user(FILE *file, int *counter){
 
 int menu_user(ptr_user nama){
     int pilihan;
-    system("CLS");
+    //system("CLS");
     printf("===========================================\n");
-    printf("Selamat datang %s\n",*nama->name);
+    printf("Selamat datang %s\n",nama->name);
     printf("===========================================\n");
     //Tinggal di sesuaikan menu dengan pilihan nanti
     printf("\n1. List Jenis Sampah");
@@ -123,7 +123,7 @@ int menu_user(ptr_user nama){
 
 int menu_admin(){
     int pilihan;
-    system("CLS");
+    //system("CLS");
     printf("===========================================\n");
     printf("Selamat datang di menu admin\n");
     printf("===========================================\n");
@@ -199,11 +199,10 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
     }
 }
 
-void tambahSampah(FILE *dataSampah){
+void tambahSampah(FILE *dataSampah,int *counter_sampah){
     char namaSampah[32];
     int hargaSampah;
     int sentinel = 0;
-    int counter = 0;
     dataSampah = fopen("List Sampah", "w");
     while(sentinel != 1){
         printf("===========================\n");
@@ -213,17 +212,10 @@ void tambahSampah(FILE *dataSampah){
         scanf(" %[^\n]", namaSampah);
         printf("Silahkan Masukkan Harga Sampah : ");
         scanf("%d", &hargaSampah);
-        
-        if(counter == 0){
-            fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
-        }
-        fprintf(dataSampah, "\n%s\t%d", namaSampah,hargaSampah);
-        
-        counter++;
-        
+        fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);
+        *counter_sampah++;
         printf("\nLanjut(0) Keluar(1)");
         scanf("%d", &sentinel);
-	
 	}
     fclose(dataSampah);
 
