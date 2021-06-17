@@ -8,6 +8,7 @@
 struct Trash{
     char trash_name[25];
     int value;
+    int jumlah;
     struct Trash *next_trash;
 };
 typedef struct Trash trash;
@@ -26,11 +27,12 @@ typedef user *ptr_user;
 
 //Function prototype section
 void count_create_user(FILE *file, int *counter);
-int menu_user();
+int menu_user(ptr_user nama);
 int menu_admin();
 void login(char user_temp[32], char pass_temp[32]);
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database);
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
+void tambahJenis(FILE *dataSampah);
 
 
 //Main function section
@@ -50,7 +52,9 @@ int main(){
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             switch(menu_admin()){
                 case 1:
-                    //command
+                    break;
+                case 2:
+                    tambahJenis(file);
                     break;
                 default:
                     break;
@@ -66,9 +70,9 @@ int main(){
                     continue;
                 }
             }else{
-                switch (menu_user()){
+                switch (menu_user(temp)){
                 case 1:
-                    //command
+                    //function
                     break;
                 
                 default:
@@ -102,16 +106,16 @@ void count_create_user(FILE *file, int *counter){
     }
 }
 
-int menu_user(){
+int menu_user(ptr_user nama){
     int pilihan;
     system("CLS");
     printf("===========================================\n");
-    printf("Selamat datang <nama>\n");
+    printf("Selamat datang %s\n",*nama->name);
     printf("===========================================\n");
     //Tinggal di sesuaikan menu dengan pilihan nanti
-    printf("\n1. Menu 1");
-    printf("\n2. Menu 2");
-    printf("\n3. Menu 3");
+    printf("\n1. List Jenis Sampah");
+    printf("\n2. Penyetoran Sampah");
+    printf("\n3. Saldo Akun");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -124,9 +128,11 @@ int menu_admin(){
     printf("Selamat datang di menu admin\n");
     printf("===========================================\n");
     //Tinggal di sesuaikan menu dengan pilihan nanti
-    printf("\n1. Menu 1");
-    printf("\n2. Menu 2");
-    printf("\n3. Menu 3");
+    printf("\n1. List Jenis Sampah");
+    printf("\n2. Tambah Jenis Sampah");
+    printf("\n3. Ubah Nilai Sampah");
+    printf("\n4. List Akun");
+    printf("\n5. Hapus Akun");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -191,4 +197,22 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
     }else{
         printf("\nmemory not allocated");
     }
+}
+
+void tambahSampah(FILE *dataSampah){
+    char namaSampah[32];
+    int hargaSampah;
+    int sentinel = 0;
+    dataSampah = fopen("List Sampah", "w");
+    while(sentinel != 1){
+    printf("Silahkan Masukkan Nama Sampah : ");
+    scanf(" %[^\n]", namaSampah);
+    printf("Silahkan Masukkan Harga Sampah : ");
+    scanf("%d", &hargaSampah);
+
+    fprintf(dataSampah, "%s\t%d", namaSampah,hargaSampah);
+    printf("\nLanjut(0) Keluar(1)");
+    scanf("%d", sentinel);
+    }
+
 }
