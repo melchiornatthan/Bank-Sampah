@@ -62,7 +62,7 @@ int main(){
             	system("CLS");
                 //Switch menu admin
                 switch(menu_admin()){
-                    case 0:
+                    case 99:
                         sentinelMenu = 99;
                         break;
                     case 1:
@@ -115,7 +115,7 @@ int main(){
                 	system("CLS");
                     //Switch menu user
                     switch (menu_user(temp)){
-                        case 0:
+                        case 99:
                             sentinelMenu = 99;
                             break;
                         case 1:
@@ -170,9 +170,10 @@ int menu_user(ptr_user nama){
     printf("===========================================\n");
     //Tinggal di sesuaikan menu dengan pilihan nanti
     printf("\n1. List Jenis Sampah");
-    printf("\n2. Penyetoran Sampah");
-    printf("\n3. Saldo Akun");
-    printf("\n\n0. Keluar");
+    printf("\n2. List Sampah Akun");
+    printf("\n3. Penyetoran Sampah");
+    printf("\n4. Saldo Akun");
+    printf("\n\n99. Keluar");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -192,7 +193,7 @@ int menu_admin(){
     printf("\n4. List Akun");
     printf("\n5. Hapus Akun");
     printf("\n6. Hapus Jenis Sampah");
-    printf("\n\n0. Keluar");
+    printf("\n\n99. Keluar");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
