@@ -34,7 +34,8 @@ struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user datab
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter);
 void tambahSampah(FILE *dataSampah, int *counter_sampah);
 void list_sampah(FILE *dataSampah, int counter_sampah);
-
+void hapusAkun(ptr_user database);
+void listAkun(ptr_user database);
 
 //Main function section
 int main(){
@@ -64,6 +65,14 @@ int main(){
                         continue;
                     case 2:
                         tambahSampah(file,&counter_trash);
+                        system("pause");
+                        continue;
+                    case 4:
+                        listAkun(head);
+                        system("pause");
+                        continue;
+                    case 5:
+                        hapusAkun(head);
                         system("pause");
                         continue;
                     default:
@@ -264,4 +273,50 @@ void list_sampah(FILE *dataSampah, int counter_sampah){
         printf("%s\t%d\n", temp_nama_sampah, temp_harga_sampah);
     }
     fclose(dataSampah);
+}
+
+void listAkun(ptr_user database){
+    ptr_user current = database;
+    char user_temp[32];
+
+    if(current == NULL){
+        printf("\nThere is no account yet\n");
+    }else{
+        while(current != NULL){
+            if(strcmp(current->username,user_temp) == 0){
+                current = NULL;
+                break;
+            }
+            printf("\nNama : %s\n", current->username);
+            printf("Password : %s\n", current->password);
+            current = current->next_user;
+        }
+    }
+}
+void hapusAkun(ptr_user database){
+    ptr_user current = database;
+    char user_temp[32];
+    ptr_user address_temp_after;
+    ptr_user address_temp_before;
+    
+    listAkun(current);
+
+    printf("Silahkan Input Nama User : ");
+    scanf(" %[^\n]", user_temp);
+
+    if(current == NULL){
+        printf("\nThere is no account yet\n");
+    }else{
+        while(current != NULL){
+            
+            if(strcmp(current->username,user_temp) == 0){
+                address_temp_after = current->next_user;
+                address_temp_before->next_user = address_temp_after;
+                break;
+            }
+
+            address_temp_before = current;
+            current = current->next_user;
+        }
+    }
 }
