@@ -278,7 +278,9 @@ void list_sampah(FILE *dataSampah, int counter_sampah){
 void listAkun(ptr_user database){
     ptr_user current = database;
     char user_temp[32];
-
+    printf("=============================\n");
+    printf("=          List Akun        =\n");
+    printf("=============================\n\n");
     if(current == NULL){
         printf("\nThere is no account yet\n");
     }else{
