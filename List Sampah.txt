@@ -1,4 +1,3 @@
-Telur	3000
-Keong	2000
-Plastik	1000
-Kardus	2000
+kasur	50000
+tv	100000
+permen	500
