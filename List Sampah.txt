@@ -1,5 +1,5 @@
-buku	2000
-telu	3000
-keong	2000
+Buku	2000
+Telur	3000
+Keong	2000
 Plastik	1000
-kunyuk	2000
+Kardus	2000

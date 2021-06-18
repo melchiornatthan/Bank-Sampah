@@ -36,6 +36,7 @@ void tambahSampah(FILE *dataSampah, int *counter_sampah);
 void list_sampah(FILE *dataSampah, int counter_sampah);
 void hapusAkun(ptr_user database);
 void listAkun(ptr_user database);
+int hapusSampah(int *counter_sampah);
 
 //Main function section
 int main(){
@@ -49,12 +50,13 @@ int main(){
     count_create(file, &counter_user, "User.txt");
     count_create(file, &counter_trash, "List Sampah.txt");
 
-
+    //Switch case baik untuk user maupun admin 
     while (1)
     {
         login(user_temp, pass_temp);
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             do{
+                //Switch menu admin
                 switch(menu_admin()){
                     case 0:
                         sentinelMenu = 99;
@@ -75,6 +77,11 @@ int main(){
                         hapusAkun(head);
                         system("pause");
                         continue;
+                    case 6:
+                		list_sampah(file,counter_trash);
+                    	hapusSampah(&counter_trash);
+                    	system("pause");
+                    	continue;
                     default:
                         printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
                         system("pause");
@@ -85,6 +92,7 @@ int main(){
         }else{
             temp = user_checker(user_temp, pass_temp ,head);
             if(temp == NULL){
+                //Jika akun tidak terdaftar
                 printf("\nRegister your account Y(1)/N(0) ?\n");
                 scanf("%d", &select);
                 if(select == 1){
@@ -94,6 +102,7 @@ int main(){
                 }
             }else{
                 do{
+                    //Switch menu user
                     switch (menu_user(temp)){
                         case 0:
                             sentinelMenu = 99;
@@ -102,6 +111,8 @@ int main(){
                             list_sampah(file,counter_trash);
                             system("pause");
                             continue;
+                        case 2:
+
                         default:
                             printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
                             system("pause");
@@ -114,6 +125,8 @@ int main(){
 }
 
 //Function section
+
+//Funtion untuk membuat file untuk file handling
 void count_create(FILE *file, int *counter, char file_name[30]){
     char ch;
     file = fopen(file_name,"r");
@@ -133,6 +146,7 @@ void count_create(FILE *file, int *counter, char file_name[30]){
     }
 }
 
+//Function menu user beserta menunya
 int menu_user(ptr_user nama){
     int pilihan;
     //system("CLS");
@@ -149,6 +163,7 @@ int menu_user(ptr_user nama){
     return pilihan;
 }
 
+//Function menu admin beserta menunya
 int menu_admin(){
     int pilihan;
     //system("CLS");
@@ -161,12 +176,14 @@ int menu_admin(){
     printf("\n3. Ubah Nilai Sampah");
     printf("\n4. List Akun");
     printf("\n5. Hapus Akun");
+    printf("\n6. Hapus Jenis Sampah");
     printf("\n\n0. Keluar");
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
 }
 
+//Function untuk halaman login
 void login(char user_temp[32], char pass_temp[32]){
     printf("===========================\n");
     printf("=      Halaman Login      =\n");
@@ -177,6 +194,7 @@ void login(char user_temp[32], char pass_temp[32]){
     scanf(" %[^\n]",pass_temp);
 }
 
+//Function untuk mengecek user/akun
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database){
     ptr_user current = database;
     if(current == NULL){
@@ -193,6 +211,7 @@ struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user datab
     }
 }
 
+//Function untuk login dan registrasi
 void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *counter){
     ptr_user new;
     ptr_user current;
@@ -228,6 +247,7 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
     }
 }
 
+//Function untuk menambah jenis sampah
 void tambahSampah(FILE *dataSampah,int *counter_sampah){
     char namaSampah[32];
     char temp_nama_sampah[32];
@@ -237,6 +257,7 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
     printf("============================\n");
     printf("=    Input Jenis Sampah    =\n");
     printf("============================\n");
+    //Loop error handling agar jenis sampah tidak dobel
     do{
         flag = 0;
         printf("\nSilahkan Masukkan Nama Sampah : ");
@@ -249,9 +270,8 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
         }while(!feof(dataSampah));
         if(flag == 1){
             printf("\nJenis sampah sudah ada, silahkan coba lagi\n\n");
-            //system("pause");
+            system("pause");
         }
-        //system("CLS");
     }while(flag == 1);
         
     printf("Silahkan Masukkan Harga Sampah : ");
@@ -261,6 +281,7 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
     fclose(dataSampah);
 }
 
+//Function untuk melihat list sampah
 void list_sampah(FILE *dataSampah, int counter_sampah){
     int i, temp_harga_sampah;
     char temp_nama_sampah[32];
@@ -270,11 +291,12 @@ void list_sampah(FILE *dataSampah, int counter_sampah){
     printf("=============================\n\n");
     for(i = 0; i < counter_sampah; i++){
         fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
-        printf("%s\t%d\n", temp_nama_sampah, temp_harga_sampah);
+        printf("%d. %s\t%d\n", i+1, temp_nama_sampah, temp_harga_sampah);
     }
     fclose(dataSampah);
 }
 
+//Function untuk melihat list akun
 void listAkun(ptr_user database){
     ptr_user current = database;
     char user_temp[32];
@@ -295,6 +317,8 @@ void listAkun(ptr_user database){
         }
     }
 }
+
+//Function untuk menghapus akun
 void hapusAkun(ptr_user database){
     ptr_user current = database;
     char user_temp[32];
@@ -321,4 +345,46 @@ void hapusAkun(ptr_user database){
             current = current->next_user;
         }
     }
+}
+
+//Function untuk menghapus jenis sampah
+int hapusSampah(int *counter_sampah){
+    //Deklarasi variabel
+    int i, temp_harga_sampah, baris, counter = 0;
+    char temp_nama_sampah[32];
+    FILE *file1, *file2;
+    //Buka file list sampah asli
+    file1 = fopen("List Sampah.txt", "r");
+    if (!file1) {
+        printf("\nFile tidak ditemukan\n\n");
+        system("pause");
+        return 0;
+    }
+    //Membuat file copy dari list sampah
+    file2 = fopen("Temp Hapus.txt", "w"); 
+    if (!file2) {
+        printf("Gagal membuat file temporary\n\n");
+        fclose(file1);
+        return 0;
+    }
+
+    printf("\nMasukkan baris sampah yang ingin dihapus: ");
+    scanf("%d", &baris);
+    //Membuat copy dari file asli
+    while (!feof(file1)){
+        fscanf(file1, "%s\t%d", temp_nama_sampah, &temp_harga_sampah);
+        if(!feof(file1)) {
+            counter++;
+            //Jika counter sama dengan baris maka akan meng-skip fprintf
+            if (counter != baris){
+        		fprintf(file2, "%s\t%d\n", temp_nama_sampah, temp_harga_sampah);
+            }
+        }
+    }
+    //Closing agar save dari buffer
+    fclose(file1);
+    fclose(file2);
+    remove("List Sampah.txt");
+    rename("Temp Hapus.txt", "List Sampah.txt");
+    (*counter_sampah)--;
 }
