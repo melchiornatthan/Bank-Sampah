@@ -122,9 +122,12 @@ int main(){
                         	system("CLS");
                             list_sampah(file,counter_trash);
                             system("pause");
-                            break;
+                            continue;
                         case 2:
+                            system("CLS");
                             store_sampah(temp,file,counter_trash);
+                            system("pause");
+                            continue;
                         default:
                             printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
                             system("pause");
@@ -405,47 +408,55 @@ void store_sampah(ptr_user logged_in, FILE *dataSampah, int counter_sampah){
     ptr_trash temp;
     char temp_sampah[32];
     int temp_jumlah, flag_sampah;
-    printf("=============================\n");
-    printf("=        Setor Sampah       =\n");
-    printf("=============================\n\n");
+    //printf("=============================\n");
+    //printf("=        Setor Sampah       =\n");
+    //printf("=============================\n\n");
     list_sampah(dataSampah,counter_sampah);
-    printf("\nNama Sampah : ");
+    printf("\nNama Sampah yang disetor: ");
     scanf(" %[^\n]", temp_sampah);
     temp = trash_checker(temp_sampah, logged_in->linked_account);
     if(temp == NULL){
-        add_trash(&logged_in->linked_account,dataSampah,temp_sampah);
+        if(add_trash(&(logged_in->linked_account),dataSampah,temp_sampah) == 1){
+            printf("\nSampah tidak di temukan\n");
+            
+        }else{
+            printf("\nSampah terdata\n");
+        }
     }else{
+        printf("Sampah sudah ada\n");
         printf("Jumlah : ");
-        scanf("%d",temp_jumlah);
+        scanf("%d",&temp_jumlah);
         temp->jumlah += temp_jumlah;
     }
 }
 
 struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
-    ptr_trash current = database;
-    if(current == NULL){
-        printf("\nThere is no trash yet\n");
+    int flag = 0;
+    if(database == NULL){
+        printf("\nSampah belum terdata dalam akun\n");
         return NULL;
     }else{
-        while(current != NULL){
-            if(strcmp(current->trash_name,sampah_temp) == 0){
-                return current;
-                break;
+        while(database != NULL){
+            if(strcmpi(database->trash_name,sampah_temp) == 0){
+                return database;
+                break;  
             }
-            current = current->next_trash;
+            database = database->next_trash;
         }
     }
 }
 
+
 int add_trash(ptr_trash *add,FILE *dataSampah, char sampah[32]){
-    ptr_trash current,new;
+    ptr_trash current;
+    ptr_trash new;
     char nama_sampah[32];
     int harga_sampah,flag = 0;
     dataSampah = fopen("list Sampah.txt","r");
-    while (!feof(dataSampah))
-    {
-        fprintf(dataSampah,"%s\t%d",nama_sampah,&harga_sampah);
-        if(strcmp(sampah,nama_sampah) == 0){
+    while(!feof(dataSampah)){
+        fscanf(dataSampah,"%s\t%d",nama_sampah,&harga_sampah);
+        if(strcmpi(sampah,nama_sampah) == 0){
+            flag = 0;
             break;
         }else{
             flag = 1;
@@ -458,7 +469,8 @@ int add_trash(ptr_trash *add,FILE *dataSampah, char sampah[32]){
         new = malloc(sizeof(trash));
         strcpy(new->trash_name,nama_sampah);
         new->value = harga_sampah;
-        printf("\n Jumlah : ");
+        new->next_trash = NULL;
+        printf("\nJumlah : ");
         scanf("%d",&new->jumlah);
         if(*add == NULL){
             *add = new;
@@ -471,5 +483,4 @@ int add_trash(ptr_trash *add,FILE *dataSampah, char sampah[32]){
         }
         return 0;
     }
-    
 }
