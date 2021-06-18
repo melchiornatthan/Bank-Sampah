@@ -37,6 +37,8 @@ void list_sampah(FILE *dataSampah, int counter_sampah);
 void hapusAkun(ptr_user database);
 void listAkun(ptr_user database);
 int hapusSampah(int *counter_sampah);
+void store_sampah(ptr_user logged_in, FILE *dataSampah, int counter_sampah);
+struct Trash *trash_checker(char sampah_temp[32], ptr_trash database);
 
 //Main function section
 int main(){
@@ -105,6 +107,7 @@ int main(){
                 if(select == 1){
                     registration(&head,user_temp,pass_temp,&counter_user);
                 }else{
+                    store_sampah();
                     continue;
                 }
             }else{
@@ -397,3 +400,36 @@ int hapusSampah(int *counter_sampah){
     rename("Temp Hapus.txt", "List Sampah.txt");
     (*counter_sampah)--;
 }
+
+void store_sampah(ptr_user logged_in, FILE *dataSampah, int counter_sampah){
+    ptr_trash temp;
+    char temp_sampah[32];
+    int temp_jumlah, flag_sampah;
+    printf("=============================\n");
+    printf("=        Setor Sampah       =\n");
+    printf("=============================\n\n");
+    list_sampah(dataSampah,counter_sampah);
+    printf("Nama Sampah : ");
+    scanf(" %[^\n]", temp_sampah);
+    temp = trash_checker(temp_sampah, logged_in);
+    if(temp == NULL){
+        add_trash()
+    }
+}
+
+struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
+    ptr_trash current = database;
+    if(current == NULL){
+        printf("\nThere is no trash yet\n");
+        return NULL;
+    }else{
+        while(current != NULL){
+            if(strcmp(current->trash_name,sampah_temp) == 0){
+                return current;
+                break;
+            }
+            current = current->next_trash;
+        }
+    }
+}
+

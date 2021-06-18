@@ -1,4 +1,3 @@
-Buku	2000
 Telur	3000
 Keong	2000
 Plastik	1000
