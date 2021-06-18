@@ -433,7 +433,6 @@ void store_sampah(ptr_user logged_in, FILE *dataSampah, int counter_sampah){
 struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
     int flag = 0;
     if(database == NULL){
-        printf("\nSampah belum terdata dalam akun\n");
         return NULL;
     }else{
         while(database != NULL){
