@@ -56,34 +56,41 @@ int main(){
         login(user_temp, pass_temp);
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             do{
+            	system("CLS");
                 //Switch menu admin
                 switch(menu_admin()){
                     case 0:
                         sentinelMenu = 99;
                         break;
                     case 1:
+                    	system("CLS");
                         list_sampah(file,counter_trash);
                         system("pause");
                         continue;
                     case 2:
+                    	system("CLS");
                         tambahSampah(file,&counter_trash);
                         system("pause");
                         continue;
                     case 4:
+                    	system("CLS");
                         listAkun(head);
                         system("pause");
                         continue;
                     case 5:
+                    	system("CLS");
                         hapusAkun(head);
                         system("pause");
                         continue;
                     case 6:
+                    	system("CLS");
                 		list_sampah(file,counter_trash);
                     	hapusSampah(&counter_trash);
                     	system("pause");
                     	continue;
                     default:
-                        printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
+                    	system("CLS");
+                        printf("\n\nPilihan tidak diketahui, mohon coba lagi\n\n");
                         system("pause");
                         continue;
                 }
@@ -102,12 +109,14 @@ int main(){
                 }
             }else{
                 do{
+                	system("CLS");
                     //Switch menu user
                     switch (menu_user(temp)){
                         case 0:
                             sentinelMenu = 99;
                             break;
                         case 1:
+                        	system("CLS");
                             list_sampah(file,counter_trash);
                             system("pause");
                             continue;
