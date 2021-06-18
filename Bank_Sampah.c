@@ -344,15 +344,15 @@ void hapusAkun(ptr_user database){
 
     if(current == NULL){
         printf("\nThere is no account yet\n");
-    }else{
+    }
+    else{
         while(current != NULL){
-            
+            //mengarahkan linkedlist yang sebelumnya ke sesudah
             if(strcmp(current->username,user_temp) == 0){
                 address_temp_after = current->next_user;
                 address_temp_before->next_user = address_temp_after;
                 break;
             }
-
             address_temp_before = current;
             current = current->next_user;
         }
