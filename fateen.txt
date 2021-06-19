@@ -1,0 +1,2 @@
+kasur	10
+buku	10

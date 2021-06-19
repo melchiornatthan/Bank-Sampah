@@ -1,3 +1,6 @@
 kasur	50000
 tv	100000
 permen	500
+buku	2000
+kunyuk	2000
+kacang	2000
