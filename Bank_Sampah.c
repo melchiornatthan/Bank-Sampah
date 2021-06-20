@@ -45,6 +45,7 @@ void list_sampah_akun(ptr_trash print, char nama[32]);
 void store_akun_to_file(FILE *store, ptr_user data);
 void load_akun_from_file(FILE *store, ptr_user *load, int *counter);
 int ubahNilai();
+void saldoAkun(ptr_user *data);
 
 //Main function section
 int main(){
@@ -153,7 +154,11 @@ int main(){
                             store_sampah(temp,file);
                             system("pause");
                             break;
-
+                        case 4:
+                            system("CLS");
+                            saldoAkun(head);
+                            system("pause");
+                            break;
                         
                         default:
                             printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
@@ -540,8 +545,7 @@ void store_akun_to_file(FILE *store, ptr_user data){
             snprintf(filename,sizeof(filename),"%s.txt",data->username);
             sampah = fopen(filename,"w");
             while(data->linked_account!=NULL){
-                fprintf(sampah,"%s\t%d\n",data->linked_account->trash_name,data->linked_account->jumlah);
-                data->linked_account = data->linked_account->next_trash;
+                fprintf(sampah,"%s\t%d\t%d\n",data->linked_account->trash_name,data->linked_account->jumlahmlah,data.)                data->linked_account = data->linked_account->next_trash;                                        
             }
             fclose(sampah);
         }
@@ -549,8 +553,6 @@ void store_akun_to_file(FILE *store, ptr_user data){
     }
     fclose(store);
 }
-
-//================================================================================================================
 
 void load_akun_from_file(FILE *store, ptr_user *load, int *counter){
     ptr_user new;
@@ -648,3 +650,14 @@ int ubahNilai(){
     rename("Temp Hapus.txt", "List Sampah.txt");
 }
 
+void saldoAkun(ptr_user *data){
+    int i;
+    char temp_nama[32];
+    FILE *file;
+    
+
+    #pragma omp parallel
+    {
+        
+    }
+}
