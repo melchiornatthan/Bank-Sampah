@@ -374,8 +374,7 @@ void listAkun(ptr_user database){
                 while (current){
                 #pragma omp task firstprivate(current)
                 {
-                    #pragma omp critical
-                    printf("%s\t\tThread: %d\n",current->name,omp_get_thread_num());
+                    printf("%s\t\tThread: %d\n",current->username,omp_get_thread_num());
                 }
                 current = current->next_user;
                 }
