@@ -49,6 +49,7 @@ void saldoAkun(ptr_trash data);
 
 //Main function section
 int main(){
+    system("color c0");
     int counter_user = 0, counter_trash = 0, select = 0, sentinelMenu = 0;
     char user_temp[32], pass_temp[32];
     //set for the linked list User
@@ -65,8 +66,8 @@ int main(){
     //Switch case baik untuk user maupun admin 
     while (1)
     {
-        printf("Jumlah akun terdaftar: %d\n", counter_user);
-        login(user_temp, pass_temp);
+        system("CLS");
+        login(user_temp, pass_temp); //display login
         if(strcmp(user_temp,"admin")==0 && strcmp(pass_temp,"admin")==0){
             do{
                 sentinelMenu = 0;
@@ -151,12 +152,12 @@ int main(){
                             break;
                         case 4:
                             system("CLS");
-                            printf("Saldo akun anda: ");
                             saldoAkun(temp->linked_account);
                             system("pause");
                             break;
                         
                         default:
+                            system("CLS");
                             printf("\nPilihan tidak diketahui, mohon coba lagi\n\n");
                             system("pause");
                             break;
@@ -210,6 +211,7 @@ int menu_user(ptr_user nama){
     printf("\n3. Penyetoran Sampah");
     printf("\n4. Saldo Akun");
     printf("\n\n99. Keluar");
+    fflush(stdin);
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -229,6 +231,7 @@ int menu_admin(){
     printf("\n4. Hapus Akun");
     printf("\n5. Hapus Jenis Sampah");
     printf("\n\n99. Keluar");
+    fflush(stdin);
     printf("\n\nPilihan: ");
     scanf("%d", &pilihan);
     return pilihan;
@@ -236,23 +239,23 @@ int menu_admin(){
 
 //Function untuk halaman login
 void login(char user_temp[32], char pass_temp[32]){
-    printf("===========================\n");
-    printf("=      Halaman Login      =\n");
-    printf("===========================\n");
+    printf("============================\n");
+    printf("=        Bank Sampah       =\n");
+    printf("============================\n");
     printf("\nUsername : ");
-    scanf(" %[^\n]",user_temp);
+    scanf(" %[^\n]",user_temp); //meminta username dari pengguna
     printf("\npassword : ");
-    scanf(" %[^\n]",pass_temp);
+    scanf(" %[^\n]",pass_temp);//meminta password dari pengguna
 }
 
 //Function untuk mengecek user/akun
 struct User *user_checker(char user_temp[32], char pass_temp[32], ptr_user database){
     ptr_user current = database;
-    if(current == NULL){
+    if(current == NULL){ //mengecek apakah linked list memiliki isi atau tidak
         printf("\nThere is no account yet\n");
         return NULL;
     }else{
-        while(current != NULL){
+        while(current != NULL){ //mengecek apakah data yang diinput memiliki kesamaan pada data sebelumnya
             if(strcmp(current->username,user_temp) == 0 && strcmp(current->password,pass_temp) == 0){
                 return current;
                 break;
@@ -269,9 +272,9 @@ void registration(ptr_user *head, char user_temp[32], char pass_temp[32], int *c
 
     new = malloc(sizeof(user));
     if(new != NULL){
-        printf("===========================\n");
+        printf("=~=~=~=~=~=~=~=~=~=~=~=~=~=\n");
         printf("=      Halaman Login      =\n");
-        printf("===========================\n\n");
+        printf("=~=~=~=~=~=~=~=~=~=~=~=~=~=\n\n");
         printf("Username : %s\n", user_temp);
         strcpy(new->username,user_temp);
         printf("Password : %s\n", pass_temp);
@@ -310,10 +313,10 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
     printf("============================\n");
     //Loop error handling agar jenis sampah tidak dobel
     do{
-        flag = 0;
+        flag = 0; //meminta nama sampah dari user untuk ditambahkan
         printf("\nSilahkan Masukkan Nama Sampah : ");
         scanf(" %[^\n]", namaSampah);
-        do{
+        do{ //mengecek apakah sampah yang diinput sudah ada
             fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
             if(strcmpi(temp_nama_sampah, namaSampah) == 0){
                 flag = 1;
@@ -324,10 +327,10 @@ void tambahSampah(FILE *dataSampah,int *counter_sampah){
             system("pause");
         }
     }while(flag == 1);
-        
+    //meminta harga untuk jenis sampah baru    
     printf("Silahkan Masukkan Harga Sampah : ");
     scanf("%d", &hargaSampah);
-    fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);
+    fprintf(dataSampah, "%s\t%d\n", namaSampah,hargaSampah);//mememasukkan sampah baru ke file data
     (*counter_sampah)++;
     fclose(dataSampah);
 }
@@ -345,10 +348,10 @@ void list_sampah(FILE *dataSampah, int counter_sampah){
 	    #pragma omp for ordered private(temp_nama_sampah, temp_harga_sampah)
 		for(i = 0; i < counter_sampah; i++){
 	        #pragma omp ordered
-			{
+			{   //mengambil list sampah dari file untuk ditampilkan
 				#pragma omp critical
-				fscanf(dataSampah,"%s\t%d",temp_nama_sampah,&temp_harga_sampah);
-			    printf("%d. %s\t%d\t\tThread: %d\n", i+1, temp_nama_sampah, temp_harga_sampah, omp_get_thread_num());
+				fscanf(dataSampah," %[^\t]\t%d",temp_nama_sampah,&temp_harga_sampah);
+			    printf("%d. %10s\t%15d\t\n", i+1, temp_nama_sampah, temp_harga_sampah);
 			}
 	    }
 	    #pragma omp barrier
@@ -363,6 +366,7 @@ void listAkun(ptr_user database){
     printf("=============================\n");
     printf("=          List Akun        =\n");
     printf("=============================\n\n");
+    printf("%3sUsername%10sNama\n\n"," "," ");
     if(head == NULL){
         printf("\nThere is no account yet\n");
     }else{
@@ -373,9 +377,9 @@ void listAkun(ptr_user database){
             {
                 while (current){
                 #pragma omp task firstprivate (current)
-                {
+                {   //mengambil list akun dari file untuk di print
                 	#pragma omp critical
-                    printf("%s\t%s\tThread: %d\n",current->username,current->name,omp_get_thread_num());
+                    printf("%10s%15s\n",current->username,current->name);
                 }
                 current = current->next_user;
                 }
@@ -386,13 +390,14 @@ void listAkun(ptr_user database){
 
 //Function untuk menghapus akun
 void hapusAkun(ptr_user database){
+    int flag = 0;
     ptr_user current = database;
     char user_temp[32];
     ptr_user address_temp_after;
     ptr_user address_temp_before;
     
     listAkun(current);
-
+    //meminta pengguna data yang ingin dihapus
     printf("Silahkan Input Nama User : ");
     scanf(" %[^\n]", user_temp);
 
@@ -401,15 +406,18 @@ void hapusAkun(ptr_user database){
     }
     else{
         while(current != NULL){
-            //mengarahkan linkedlist yang sebelumnya ke sesudah
+            //mengarahkan linkedlist yang sebelumnya ke sesudah untuk melompati data yang ingin dihapus
             if(strcmp(current->username,user_temp) == 0){
                 address_temp_after = current->next_user;
                 address_temp_before->next_user = address_temp_after;
+                flag = 1;
                 break;
             }
             address_temp_before = current;
             current = current->next_user;
         }
+        if(flag == 0)
+        printf("there is no account (%s)", user_temp);
     }
 }
 
@@ -433,9 +441,11 @@ int hapusSampah(int *counter_sampah){
         fclose(file1);
         return 0;
     }
-
-    printf("\nMasukkan baris sampah yang ingin dihapus: ");
-    scanf("%d", &baris);
+    do{
+        fflush(stdin);
+        printf("\nMasukkan baris sampah yang ingin dihapus: ");
+    }while(scanf("%d", &baris) != 1);
+    
     //Membuat copy dari file asli
     while (!feof(file1)){
         fscanf(file1, "%s\t%d", temp_nama_sampah, &temp_harga_sampah);
@@ -455,7 +465,7 @@ int hapusSampah(int *counter_sampah){
     (*counter_sampah)--;
 }
 
-void store_sampah(ptr_user logged_in, FILE *dataSampah){
+void store_sampah(ptr_user logged_in, FILE *dataSampah){//menyetor sampah yang diinginkan pengguna
     ptr_trash temp;
     char temp_sampah[32];
     int temp_jumlah, flag_sampah;
@@ -465,7 +475,7 @@ void store_sampah(ptr_user logged_in, FILE *dataSampah){
     printf("\nNama Sampah yang disetor: ");
     scanf(" %[^\n]", temp_sampah);
     temp = trash_checker(temp_sampah, logged_in->linked_account);
-    if(temp == NULL){
+    if(temp == NULL){ //mengecek apakah sampah yang disetor terdaftar pada jenis sampah
         if(add_trash(&(logged_in->linked_account),dataSampah,temp_sampah) == 1){
             printf("\nSampah tidak di temukan\n");
             
@@ -484,7 +494,7 @@ struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
     int flag = 0;
     if(database == NULL){
         return NULL;
-    }else{
+    }else{ //mengecek apakah jenis sampah sudah ada pada database
         while(database != NULL){
             if(strcmpi(database->trash_name,sampah_temp) == 0){
                 return database;
@@ -495,7 +505,7 @@ struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
     }
 }
 
-
+//menambahkan jenis sampah pada file data sampah
 int add_trash(ptr_trash *add,FILE *dataSampah, char sampah[32]){
     ptr_trash current;
     ptr_trash new;
@@ -533,13 +543,13 @@ int add_trash(ptr_trash *add,FILE *dataSampah, char sampah[32]){
         return 0;
     }
 }
-
+//menunjukkan sampah yang telah di setor oleh pengguna
 void list_sampah_akun(ptr_trash print, char nama[32]){
     ptr_trash current;
     printf("=============================\n");
     printf("=        Sampah %s \n",nama);
     printf("=============================\n\n");
-    printf("Nama\tJumlah\n\n");
+    printf("%6sNama%10sJumlah\n\n"," "," ");
     if(print == NULL){
         printf("\nThere is no trash yet\n");
     }else{
@@ -552,7 +562,7 @@ void list_sampah_akun(ptr_trash print, char nama[32]){
                 #pragma omp task firstprivate(current)
                 {
                     #pragma omp critical
-                    printf("%s\t%d\tThread: %d\n", current->trash_name, current->jumlah, omp_get_thread_num());
+                    printf("%10s%15d\n", current->trash_name, current->jumlah);
                 }
                 current = current->next_trash;
                 }
@@ -560,7 +570,7 @@ void list_sampah_akun(ptr_trash print, char nama[32]){
         }
     }
 }
-
+//menyimpan data akun pada file agar tidak hilang saat dijalankan selanjutnya
 void store_akun_to_file(FILE *store, ptr_user data){
     FILE *sampah;
     store = fopen("User.txt", "w");
@@ -581,7 +591,7 @@ void store_akun_to_file(FILE *store, ptr_user data){
     }
     fclose(store);
 }
-
+//mengambil data saat memulai program
 void load_akun_from_file(FILE *store, ptr_user *load){
     ptr_user new;
     ptr_user temp_user;
@@ -593,7 +603,7 @@ void load_akun_from_file(FILE *store, ptr_user *load){
     store = fopen("User.txt","r");
     while(!feof(store)){
         new = malloc(sizeof(user));
-        fscanf(store,"%s\t%s\t%s\n",new->username,new->password,new->name);
+        fscanf(store," %[^\t]\t %[^\t]\t %[^\n]\n",new->username,new->password,new->name);
         new->next_user = NULL;
         new->linked_account = NULL;
         snprintf(filename,sizeof(filename),"%s.txt",new->username);
@@ -602,7 +612,7 @@ void load_akun_from_file(FILE *store, ptr_user *load){
             while(!feof(sampah)){
                 temp = new->linked_account;
                 new_trash = malloc(sizeof(trash));
-                fscanf(sampah,"%s\t%d\t%d\n",new_trash->trash_name,&new_trash->jumlah,&new_trash->value);
+                fscanf(sampah," %[^\t]\t%d\t%d\n",new_trash->trash_name,&new_trash->jumlah,&new_trash->value);
                 new_trash->next_trash = NULL;
                 if(temp == NULL){
                     new->linked_account = new_trash;
@@ -627,10 +637,12 @@ void load_akun_from_file(FILE *store, ptr_user *load){
     }
     fclose(store);
 }
-
+//menunjukkan saldo akun yang tersisa pada akun pengguna
 void saldoAkun(ptr_trash data){
     int i,sum = 0;
-    char temp_nama[32];
+    printf("=============================\n");
+    printf("=         Saldo Akun        =\n");
+    printf("=============================\n\n");
     ptr_trash current;
     current = data;
 
@@ -650,5 +662,5 @@ void saldoAkun(ptr_trash data){
             }
         }
     }
-    printf("\nRp. %d\n\n", sum);
+    printf("Rp. %d\n\n", sum);
 }

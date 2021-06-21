@@ -1,5 +1,0 @@
-fateen	123	teen
-nattan	123	tan
-jaya	123	jay
-valen	123	len
-kucing	123	cing
