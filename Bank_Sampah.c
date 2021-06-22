@@ -152,6 +152,7 @@ int main(){
                             break;
                         case 4:
                             system("CLS");
+                            list_sampah_akun(temp->linked_account, temp->name);
                             saldoAkun(temp->linked_account);
                             system("pause");
                             break;
@@ -641,12 +642,11 @@ void load_akun_from_file(FILE *store, ptr_user *load){
 void saldoAkun(ptr_trash data){
     int i,sum = 0;
     printf("=============================\n");
-    printf("=         Saldo Akun        =\n");
-    printf("=============================\n\n");
+    printf("=      Total Saldo Akun     =\n");
+    printf("=============================\n");
     ptr_trash current;
     current = data;
 
-    
     #pragma omp parallel
     {
         current = data;
@@ -662,5 +662,5 @@ void saldoAkun(ptr_trash data){
             }
         }
     }
-    printf("Rp. %d\n\n", sum);
+    printf("Total: Rp. %d\n\n", sum);
 }
