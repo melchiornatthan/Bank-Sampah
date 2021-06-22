@@ -1,4 +1,10 @@
 # Bank-Sampah
+this program is made to help bank sampah to manage their customer.
+first this program can make account and in the other side it has admin menu.
+in the user menu user could convert the trash to cash and the data stored in the program
+in admin side admin could edit the trash by adding and erase, also admin could erase user.
+
+
 This source code is made by 
 
 1. Fateen Najib Indramustika                        (2006468522)
