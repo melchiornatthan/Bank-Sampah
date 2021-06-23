@@ -491,6 +491,7 @@ void store_sampah(ptr_user logged_in, FILE *dataSampah){//menyetor sampah yang d
     }
 }
 
+//mengecek trash dari akun
 struct Trash *trash_checker(char sampah_temp[32], ptr_trash database){
     int flag = 0;
     if(database == NULL){
